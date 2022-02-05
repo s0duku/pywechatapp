@@ -3,6 +3,8 @@
 
 基于 Windows10 微信 3.4.5.45 逆向结果编写的 Python API 接口，可用于简单微信机器人编写。
 
+![2](examples/2.jpg) 
+
 ![1](examples/1.jpg)
 
 ## Requirement
