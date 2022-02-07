@@ -26,7 +26,13 @@ char* UnicodeToUtf8(const wchar_t* unicode,char * szUtf8)
 	}
 	int len;
 	len = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, NULL, 0, NULL, NULL);
-	memset(szUtf8, 0, len + 1);
-	WideCharToMultiByte(CP_UTF8, 0, unicode, -1, szUtf8, len, NULL, NULL);
+	if (len > 8000) {
+		memset(szUtf8, 0, len + 1);
+		WideCharToMultiByte(CP_UTF8, 0, L"Buffer Over Flow Detected!", -1, szUtf8, len, NULL, NULL);
+	}
+	else {
+		memset(szUtf8, 0, len + 1);
+		WideCharToMultiByte(CP_UTF8, 0, unicode, -1, szUtf8, len, NULL, NULL);
+	}
 	return szUtf8;
 }

@@ -42,32 +42,38 @@ python main.py
 
 ```
 from lib2to3.pgen2.token import tok_name
+from pywechat.WeChatMsg.WeChatMsgSrv import WeChatMsgSrv
 from pywechat.WeChatMsg.WeChatTextRecv import WeChatTextRecv
 from pywechat.WeChatMsg.WeChatFifo import WeChatFifo
 from pywechat.RobotApp.Weather import Weather
 import time
 
-msg = WeChatTextRecv()
+
+srv = WeChatMsgSrv()
 fifo = WeChatFifo()
 
-print("\nStart Wechat Robot\n")
+srv.start()
+
+print("\nStart Wechat Srv\n")
 
 my_chatroom_name = 's0duku'
-# attention ! The wxid must start with wxid_, this is your true wxid。
-my_wxid = 'filehelper'
 
 chatroom_payload = '@{}\u2005'.format(my_chatroom_name)
-
+chatroom_payload1 = '@{}'.format(my_chatroom_name)
 
 def robot_loop():
+    print("Start Wechat Robot\n")
     while True:
-        id,wxid,text = msg.recvText()
-        if not id:
+        msg = srv.getMsg()
+        if not msg:
             continue
+        id,wxid,text = msg
         _,nickname,_ = fifo.userInfo(wxid)
-        if text.startswith(chatroom_payload) or id == my_wxid:
+        if text.startswith(chatroom_payload1):
             if text.startswith(chatroom_payload):
                 text = text[len(chatroom_payload):]
+            else:
+                text = text[len(chatroom_payload1):]
             print("[REPLY TO] {}: {}".format(nickname,text))
             fifo.sendText(id,robot_exec(text))
         else:
