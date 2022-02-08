@@ -10,6 +10,8 @@ class WeChatFifo:
         if(not self.shm_mutex):
             raise
     def sendText(self,wxid,text):
+        if(len(text) > 2000):
+            text = "Send Overflow Detected!"
         win32event.WaitForSingleObject(self.shm_mutex,0xffffffff)
         self.shm.seek(0)
         self.shm.write(PyWechatConf.WECHAT_HELPER_FIFO_CMD_SEND)
